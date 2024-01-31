@@ -1,13 +1,15 @@
 import time 
 import random
 import rtmidi
-from rich.console import Console
+from rich.console import Console, Group
+from rich.padding import Padding
 from rich.live import Live
+from rich.style import Style
 from rich.table import Table
 
 midiout = rtmidi.MidiOut()
 available_ports = midiout.get_ports()
-midiout.open_port(1)
+#midiout.open_port(1)
 
 console = Console()
 
@@ -34,6 +36,8 @@ class Note:
                 self.sent = 'on'
                 return (0x90, self.key, self.velocity)
 
+
+
 def main() -> None:
     keys: list = []
     for n in range(21, 127):
@@ -46,8 +50,38 @@ def main() -> None:
     #notes[60].append((0x80, 0, 500_000_000))
     keys[60].append(Note(60, 112, 0, 500_000_000))
     keys[62].append(Note(62, 112, 500_000_000, 1_000_000_000))
+    #keys[62].append(Note(62, 112, 1_500_000_000, 2_000_000_000))
 
 
+
+    #white: Style = Style(color='blue on white')
+    #roll: list = []
+    #roll.append(('C#    ', 'white on black'))
+    #roll.append(('C    ', 'black on white'))
+    # this will be how many ns a char is
+    scale: int = 500_000_000
+    key: list = []
+    for i in range(16):
+        key.append(' ')
+    for note in keys[62]:
+        #for i in range(int((note.end - note.start) / scale)):
+        index = int(note.start / scale)
+            #print(index)
+            #key[int(note.start % scale)] = 'O'
+        key[index] = 'O'
+            #key[i] = 'O'
+
+
+    with Live(refresh_per_second=30) as live:
+        while 1:
+            console.clear()
+            #for i in range(10):
+                #console.print(random.choice(['hi', 'bye']), style='blue on white')#'#FF0000')
+            #for key in roll:
+                #console.print(key[0], style=key[1])
+            #console.print('|[black on white]C    [/]#')
+            console.print(str(key))
+            pass
 
     start = time.time_ns()
     while 1:
@@ -57,19 +91,6 @@ def main() -> None:
                 message: tuple = note.message(now)
                 if message != None:
                     midiout.send_message(message)
-        '''
-        for i, n in enumerate(notes):
-            for e in n[:]:
-                now = time.time_ns() - start
-                if e[2] < now:
-                    print('sent')
-                    midiout.send_message([e[0], 60, e[1]])#[0x90, 60, 112])
-                    #midiout.send_message([0x90, 60, 112])
-                    n.remove(e)
-        '''
-
-
-
 
 def midi_stuff():
     print(available_ports)
