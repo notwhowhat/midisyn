@@ -49,7 +49,7 @@ def main() -> None:
     #notes[60].append((0x90, 112, 0))
     #notes[60].append((0x80, 0, 500_000_000))
     keys[60].append(Note(60, 112, 0, 500_000_000))
-    keys[62].append(Note(62, 112, 500_000_000, 2_000_000_000))
+    keys[62].append(Note(62, 112, 500_000_000, 2_500_000_000))
     #keys[62].append(Note(62, 112, 1_500_000_000, 2_000_000_000))
 
 
@@ -59,16 +59,17 @@ def main() -> None:
     #roll.append(('C#    ', 'white on black'))
     #roll.append(('C    ', 'black on white'))
     # this will be how many ns a char is
-    scale: int = 500_000_000
+    scale: int = 250_000_000
     key: list = []
     for i in range(16):
         key.append(' ')
     for note in keys[62]:
-        #for i in range(int((note.end - note.start) / scale)):
-        index = int(note.start / scale)
-        key[index] = 'O'
-        index = int(note.end / scale) -1
-        key[index] = 'O'
+        # gets the right indexes to fill in.
+        on = int(note.start / scale)
+        off = int(note.end / scale)
+
+        for i in range(on, off):
+            key[i] = 'O'
          
             #print(index)
             #key[int(note.start % scale)] = 'O'
