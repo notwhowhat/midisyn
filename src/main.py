@@ -49,7 +49,7 @@ def main() -> None:
     #notes[60].append((0x90, 112, 0))
     #notes[60].append((0x80, 0, 500_000_000))
     keys[60].append(Note(60, 112, 0, 500_000_000))
-    keys[62].append(Note(62, 112, 500_000_000, 1_000_000_000))
+    keys[62].append(Note(62, 112, 500_000_000, 2_000_000_000))
     #keys[62].append(Note(62, 112, 1_500_000_000, 2_000_000_000))
 
 
@@ -66,9 +66,12 @@ def main() -> None:
     for note in keys[62]:
         #for i in range(int((note.end - note.start) / scale)):
         index = int(note.start / scale)
+        key[index] = 'O'
+        index = int(note.end / scale) -1
+        key[index] = 'O'
+         
             #print(index)
             #key[int(note.start % scale)] = 'O'
-        key[index] = 'O'
             #key[i] = 'O'
 
 
